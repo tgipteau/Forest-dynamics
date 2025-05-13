@@ -59,6 +59,10 @@ def get_progress(sim_name, max_iter):
     max_n = -1
     output_folder = DOSSIER_SIMULATIONS + "/" + sim_name + "/output"
     
+    if not os.path.exists(output_folder):
+        # si pas encore de dossier ouput, attendre...
+        return 0, "inf"
+    
     for filename in os.listdir(output_folder):
         match = pattern.match(filename)
         if match:
@@ -125,6 +129,7 @@ def creer_nouvelle_simulation(parametres):
     sim_folder = os.path.join(DOSSIER_SIMULATIONS, sim_name)
     
     if os.path.exists(sim_folder):
+        # si existe déjà, le vider
         shutil.rmtree(sim_folder)
     os.makedirs(sim_folder)
     
