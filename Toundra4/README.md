@@ -1,10 +1,10 @@
-## FISO 4
+## TOUNDRA 4
 ### <b>Modèle à quatre équations avec compétition. Méthode des différences finies.</b>
 
 ## UTILISATION 
 
 1 - régler ses paramètres de simulation dans config.yaml <i>(lire les commentaires)</i><br>
-2 - lancer fiso4.main<br>
+2 - lancer Toundra4.main<br>
 3- les boutons / curseurs ne sont utilisables qu'après un tour complet de la simulation,
 pour pouvoir sauvegarder la vidéo / les frames<br>
 

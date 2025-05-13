@@ -11,7 +11,7 @@ import random
 import math
 from tqdm import tqdm
 
-with open("config_fiso4.yaml", "r") as f:
+with open("config_toundra4.yaml", "r") as f:
     config = yaml.safe_load(f)
 
 
