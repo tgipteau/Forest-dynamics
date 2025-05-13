@@ -3,7 +3,7 @@
 # True et "name" ->> nouvelle simulation dans "name" (= écrase la précédente si "name" existe déjà !)
 # False et "name" ->> charge la simulation enregistrée dans "name" (si "name" n'existe pas : erreur)
 MAKE_NEW_SIMULATION: True
-SIMULATION_SAVE_FOLDER: "default"
+SIMULATION_SAVE_FOLDER: "no_screen_tries"
 
 
 # paramètres rendu
@@ -44,7 +44,7 @@ params_simulation:
   # Paramètres de discrétisation
   L: 20
   J: 40                       # discrétisation spatiale
-  T: 100                   # temps maximal
+  T: 10                   # temps maximal
   N: 1000
 
   # Paramètres feux

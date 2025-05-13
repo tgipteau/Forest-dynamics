@@ -8,7 +8,7 @@ from tqdm import tqdm
 from scipy.integrate import odeint
 import asyncio
 from matplotlib import pyplot as plt
-from numpy.random import  uniform
+from numpy.random import uniform
 
 
 """
@@ -29,7 +29,7 @@ delta = 0.5
 # discrétisation
 L = 20
 J = 40
-T = 25
+T = 100
 N = 1000
 freq = 1
 minree = 2
@@ -79,12 +79,17 @@ def reaction(X, t):
 
 
 def start_in_ball(center, radius):
-    
-    center = np.ones(J*J) * center
-    d = len(center)
-    X = np.random.randn(2, d)
+   
+    center = np.ones((2, J*J)) * center
+    print(center)
+    X = np.random.uniform(low=-1, high=1, size=(2, J*J))
+    print("X", X)
     X /= np.linalg.norm(X, axis=1, keepdims=True)  # unit vectors
-    R = np.random.rand(2, 1) ** (1 / d) * radius  # uniform radius in ball
+    print("X", X)
+    R = random.random() * radius  # uniform radius in ball
+    print(X*R)
+
+    print(center + X * R)
     return center + X * R # [u0, w0]
 
     
@@ -202,7 +207,7 @@ async def update_plots():
     plt.ion()
     fig, ax = plt.subplots(figsize=(5, 8))
     persistence_norm = np.linalg.norm(Ueq)
-    ax.set_ylim(persistence_norm * 0.7 , persistence_norm * 1.1)
+    ax.set_ylim(persistence_norm*.9, persistence_norm * 1.1)
 
     ax.axhline(y=float(persistence_norm), color='green', linestyle='--')  # ligne "persistence"
     #ax.invert_yaxis()
@@ -246,7 +251,7 @@ async def update_plots():
 async def main():
     await asyncio.gather(
         update_plots(),
-        run_simulation(start_from=0, nb_simulations=50, ballcenter=uplus, ballradius=.2)
+        run_simulation(start_from=0, nb_simulations=50, ballcenter=uplus, ballradius=40)
     )
 
 

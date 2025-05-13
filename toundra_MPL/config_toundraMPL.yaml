@@ -1,0 +1,55 @@
+# Paramètres de simulation
+
+# True et "name" ->> nouvelle simulation dans "name" (= écrase la précédente si "name" existe déjà !)
+# False et "name" ->> charge la simulation enregistrée dans "name" (si "name" n'existe pas : erreur)
+MAKE_NEW_SIMULATION: False
+SIMULATION_SAVE_FOLDER: "default"
+
+
+# paramètres rendu
+
+ISO_SCALE: 32                    # à changer en fonction de la taille de omega
+MAX_ELMTS_PER_TILE: 12          # ratio par rapport à iso_scale
+ELMT_SIZE: 0.6                   # taille des arbres en ratio (peut être > 1) par rapport à iso_scale
+TPS: 16                          # ticks par seconde (=vitesse de lecture)
+FIRE_DURATION: 5                 # durée en pas de temps (entier)
+DEAD_TREE_DURATION: 15           # idem
+
+MAX_TRUE_NUMBER_OF_TREES: 1.2
+
+
+## Paramètres suivants utilisés seulement si MAKE_NEW_SIMULATION: True
+
+params_simulation:
+  # Paramètres du modèle
+  # forêt boréale (vert foncé)
+  alpha_b: 0.8    # taux succès graines
+  beta_b: 1     # taux transfert graines
+  delta_b: 0.5  # taux diffusion graines
+
+  # forêt mixte (vert clair)
+  alpha_m: 0.8
+  beta_m: 1
+  delta_m: 1
+
+
+  # compétition / q-fonction
+  a: 3
+  b: 1
+  c: 0.5
+  gamma_south : 0.4          # on attend un nombre positif (avantage les mixtes)
+  gamma_north : -0.4            #  on attend un nombre négatif (avantage les boreal)
+                                # gamma sera interpolé linéairement entre sud et nord
+
+  # Paramètres de discrétisation
+  L: 20
+  J: 40                       # discrétisation spatiale
+  T: 10                   # temps maximal
+  N: 1000
+
+  # Paramètres feux
+  p: 0.1             # probabilité feu à chaque pas de temps
+  freq: 1            # pas de temps minimal entre feux
+  intensity: 0.7
+  minree: 2
+  maxree: 6
