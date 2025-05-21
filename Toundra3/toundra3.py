@@ -28,7 +28,7 @@ SIMULATION_SAVE_FOLDER = os.path.join("Simulations", config["SIMULATION_SAVE_FOL
 ISO_SCALE = config["ISO_SCALE"]  # échelle du rendu
 MAX_ELMTS_PER_TILE = config["MAX_ELMTS_PER_TILE"]  # ratio par rapport à iso_scale
 ELMT_SIZE = int(
-    config["ELMT_SIZE"] * ISO_SCALE
+    float(config["ELMT_SIZE"]) * ISO_SCALE
 )  # taille des arbres en ratio (peut être > 1) par rapport à iso_scale
 TPS = config["TPS"]  # ticks par seconde (=vitesse de lecture)
 FIRE_DURATION = config["FIRE_DURATION"]  # durée en pas de temps (integer)
@@ -221,7 +221,14 @@ def run_simulation(save_folder="Simulations/default"):
         # Saut de ligne avant les paramètres dérivés
         f_.write("----------\n")
         # Écriture des paramètres dérivés
-        derived_params = {"dx": dx, "dy": dy, "dt": dt, "dtau": dtau, "kx": kx, "ky": ky}
+        derived_params = {
+            "dx": dx,
+            "dy": dy,
+            "dt": dt,
+            "dtau": dtau,
+            "kx": kx,
+            "ky": ky,
+        }
         for key, value in derived_params.items():
             f_.write(f"{key} {value}\n")
 
@@ -416,13 +423,18 @@ def grid_to_iso(i, j):
 manager = pygame_gui.UIManager((SCREEN_WIDTH, SCREEN_HEIGHT))
 ui_height = 25
 
-slider_rect = pygame.Rect((10, SCREEN_HEIGHT - ui_height), (SCREEN_WIDTH - 20, ui_height))
+slider_rect = pygame.Rect(
+    (10, SCREEN_HEIGHT - ui_height), (SCREEN_WIDTH - 20, ui_height)
+)
 play_button_rect = pygame.Rect((10, SCREEN_HEIGHT - ui_height - 60 - 10), (60, 60))
 
 slider = pygame_gui.elements.UIHorizontalSlider(
     relative_rect=slider_rect,
     start_value=0,
-    value_range=(0, 0),  # value range adaptée à MAX_T dans main seulement (MAX_T pas encore valué)
+    value_range=(
+        0,
+        0,
+    ),  # value range adaptée à MAX_T dans main seulement (MAX_T pas encore valué)
     manager=manager,
 )
 
@@ -465,7 +477,9 @@ def build_from_solution(saved_simulation_folder="Simulations/default"):
 
     u_min, u_max = df["u"].min(), df["u"].max()
 
-    unique_xy_list = list(df[["x", "y"]].drop_duplicates().itertuples(index=False, name=None))
+    unique_xy_list = list(
+        df[["x", "y"]].drop_duplicates().itertuples(index=False, name=None)
+    )
 
     print("TILE_SIZE = ", TILE_SIZE)
 
@@ -536,15 +550,22 @@ class Tile:
     def __init__(self, topleft_node):
 
         self.topleft_node = topleft_node
-        self.iso_x, self.iso_y = projeter_en_isometrique(self.topleft_node.x, self.topleft_node.y)
+        self.iso_x, self.iso_y = projeter_en_isometrique(
+            self.topleft_node.x, self.topleft_node.y
+        )
 
         self.corners = []
         self.corners.append((self.topleft_node.x, self.topleft_node.y))
         self.corners.append((self.topleft_node.x + TILE_SIZE, self.topleft_node.y))
-        self.corners.append((self.topleft_node.x + TILE_SIZE, self.topleft_node.y + TILE_SIZE))
+        self.corners.append(
+            (self.topleft_node.x + TILE_SIZE, self.topleft_node.y + TILE_SIZE)
+        )
         self.corners.append((self.topleft_node.x, self.topleft_node.y + TILE_SIZE))
 
-        self.center = (self.topleft_node.x + TILE_SIZE // 2, self.topleft_node.y + TILE_SIZE // 2)
+        self.center = (
+            self.topleft_node.x + TILE_SIZE // 2,
+            self.topleft_node.y + TILE_SIZE // 2,
+        )
 
         self.area = TILE_SIZE * TILE_SIZE
         self.u = topleft_node.u
@@ -554,7 +575,11 @@ class Tile:
 
         # nombre d'arbres à blitter (fonction du nombre max d'arbres à montrer)
         self.screen_nb_trees = [
-            int((true_nb_trees_t - TREES_T_MIN) * MAX_ELMTS_PER_TILE / (TREES_T_MAX - TREES_T_MIN))
+            int(
+                (true_nb_trees_t - TREES_T_MIN)
+                * MAX_ELMTS_PER_TILE
+                / (TREES_T_MAX - TREES_T_MIN)
+            )
             for true_nb_trees_t in self.true_nb_trees
         ]
 
@@ -582,7 +607,7 @@ class Tile:
 
         ## 2- construction des arbres
         for point in generated_points:
-            tree = Tree("hide", *point)
+            tree = Tree(*point)
             self.trees.append(tree)
 
         # construction des showtimes
@@ -594,11 +619,15 @@ class Tile:
     # dessin de la maille, et de son contour si décommenté ci-dessous
     def draw_tile(self, screen):
 
-        points_iso = [projeter_en_isometrique(corner[0], corner[1]) for corner in self.corners]
+        points_iso = [
+            projeter_en_isometrique(corner[0], corner[1]) for corner in self.corners
+        ]
         pygame.draw.polygon(screen, SNOW, points_iso)
 
     def draw_tile_borders(self, screen):
-        points_iso = [projeter_en_isometrique(corner[0], corner[1]) for corner in self.corners]
+        points_iso = [
+            projeter_en_isometrique(corner[0], corner[1]) for corner in self.corners
+        ]
         pygame.draw.polygon(screen, BLACK, points_iso, 1)
 
     # affichage des arbres ayant .show=True (appelé après draw_tiles pour bliter par dessus la maille)
@@ -705,7 +734,9 @@ if __name__ == "__main__":
         run_simulation(SIMULATION_SAVE_FOLDER)
 
     # Gestion de l'affichage des paramètres
-    lines = read_params_from(os.path.join(SIMULATION_SAVE_FOLDER, "params.txt"))  # à adapter
+    lines = read_params_from(
+        os.path.join(SIMULATION_SAVE_FOLDER, "params.txt")
+    )  # à adapter
     font = pygame.font.Font(None, 26)
     text_params = [font.render(line, True, BLACK) for line in lines]
 

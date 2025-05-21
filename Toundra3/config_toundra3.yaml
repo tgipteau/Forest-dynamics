@@ -2,7 +2,7 @@
 
 
 SIMULATION_SAVE_FOLDER: "default" # nom du dossier de la simulation à observer ou créer
-MAKE_NEW_SIMULATION: True   # si "True", créé une nouvelle simulation dans le dossier, écrasant la précédente
+MAKE_NEW_SIMULATION: False # si "True", créé une nouvelle simulation dans le dossier, écrasant la précédente
                             # si le dossier n'est pas vide ; si "False", essaye de lire la simulation enregistrée
                             # dans SIMULATION_SAVE_FOLDER, renvoyant une erreursi le dossier n'existe pas.
 
@@ -23,7 +23,7 @@ params_simulation:
   N: 1000
   # Paramètres feux
   p: 0.1             # probabilité de feu à chaque pas de temps
-  freq: 1            # pas de temps minimal entre feux
+  freq: 3           # pas de temps minimal entre feux
   intensity: 0.7     # intensité d'un feu (0.6 => 60 % des arbres dans le rayon du feu meurent)
   minree: 1          # rayon minimal d'un feu
   maxree: 6          # rayon maximal d'un feu
