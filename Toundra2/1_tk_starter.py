@@ -258,7 +258,7 @@ def pygame_time(sim_name):
     root.destroy()
     root.update_idletasks()
     
-    pygame_thread = threading.Thread(target=lambda: subprocess.run([sys.executable, "3_fiso2.py", sim_name]))
+    pygame_thread = threading.Thread(target=lambda: subprocess.run([sys.executable, "3_toundra2.py", sim_name]))
     pygame_thread.start()
     
 

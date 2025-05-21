@@ -5,12 +5,13 @@ from scipy.linalg import block_diag
 from tqdm import tqdm
 from scipy.integrate import odeint
 import sys
+import random
 
 args = sys.argv
 
 a = 1
 b = 1
-c = 0.05
+c = 0.01
 
 # boreale
 alpha = 2
@@ -20,16 +21,16 @@ delta = 0.55
 # discrétisation
 L = 20
 J = 40
-T = 5
+T = 50
 N = 1000
 freq = 1
 minree = 2
-maxree = 6
+maxree = 10
 
-p = 0
-intensity = 0.9
+p = 0.0 
+intensity = 0.7
 
-# Calcul des paramètres dérivés
+# Calcul des paramètre sdérivés
 dx = L / J
 dy = L / J
 dt = T / N
@@ -37,7 +38,7 @@ dtau = dt / 2
 kx = delta * dtau / dx ** 2
 ky = delta * dtau / dy ** 2
 
-T_linspace = np.linspace(start=0, stop=T - 2, num=T - 1)
+T_linspace = np.linspace(start=0, stop=T-1, num=T, endpoint=True)
 
 uplus = b + np.sqrt((alpha * delta - c) / a)
 umoins = b - np.sqrt((alpha * delta - c) / a)
@@ -67,32 +68,25 @@ def run_simulation(nb_simulations, ballcenter, ballradius, save_folder="Simulati
     
     def reaction(X, t):
         u, w = X
-        
+         
         du = beta * delta * w - q(u)
         dw = alpha * u - beta * w
         
         return [du, dw]
     
     def starter():
-        """
-        basé sur norme 1 (boule cube)
-        """
-        # départ au centre
-        size = J*J
-        u0 = np.ones((size)) * ballcenter[0]
-        w0 = np.ones((size)) * ballcenter[1]
-        print("u0", u0) 
-        print("w0", w0)
-        # ajout d'un bruit
-       
-        u0 += np.random.uniform(-ballradius/size, ballradius/size, size)
-        w0 += np.random.uniform(-ballradius/size, ballradius/size, size)
-
-        print("u0", u0)
-        print("w0", w0)
-        return u0, w0
         
-    
+        center = np.repeat(ballcenter, J * J).reshape(2, J*J)
+       
+        noise = np.random.uniform(-1, 1, (2,J*J))
+        #print("noise.shape : ", noise.shape)
+        noise /= norm1(noise)
+        noise *= random.random() * ballradius
+        
+        starter_ = center + noise
+        starter_ = np.maximum(np.zeros_like(starter_), starter_)
+        return starter_
+
     os.makedirs(save_folder, exist_ok=True)
     os.makedirs(os.path.join(save_folder, "Fires"), exist_ok=True)
     os.makedirs(os.path.join(save_folder, "Data"), exist_ok=True)
@@ -169,7 +163,7 @@ def run_simulation(nb_simulations, ballcenter, ballradius, save_folder="Simulati
             u = np.dot(invA, u)
             w = np.dot(invA, w)
             
-            if t % freq == 0:
+            if t % freq == 0 and t != 0 :
                 if np.random.binomial(1, p) == 1:
                     
                     xee = random.random() * J
@@ -190,15 +184,17 @@ def run_simulation(nb_simulations, ballcenter, ballradius, save_folder="Simulati
 
 
 if __name__ == "__main__":
-    nb_simulations = args[1]
-    ballcenter = args[2]
-    ballradius = args[3]
-    save_folder = args[4]
+    nb_simulations = input("nb simu :")
+    ballcenter = input("centre simu (persistence/extinction): ")
+    ballradius = input("rayon au centre : ")
+    save_folder = input("dossier de sauvegarde : ")
 
-    if ballcenter == "persistence":
+    if ballcenter == "p":
         ballcenter = uplus, wplus
-    elif ballcenter == "extinction":
-        ballcenter = 0
+    elif ballcenter == "e":
+        ballcenter = 0, 0
+    else:
+        ballcenter = float(ballcenter), float(ballcenter)
 
     print("Ball center: ", ballcenter)
     print("Ball radius: ", ballradius)

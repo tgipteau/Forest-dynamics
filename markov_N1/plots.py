@@ -21,7 +21,7 @@ def plot_folder(folder_path="Simulations"):
     ax.legend(bbox_to_anchor=(1.05, 1.0), loc='upper left')
     ax.set_xlabel("time")
     ax.set_title('Distance from extinction')
-    
+    print("Tlinspace is ", T_linspace)
     for sim in os.listdir(folder_path + "/Data"):
         
         # print("UPDATE PLOT: with ", str(sim))
@@ -31,8 +31,9 @@ def plot_folder(folder_path="Simulations"):
         
         # print(np.linalg.norm(Ueq - df[df['t'] == 0].iloc[:, -2:]))
         # pour chaque temps, calculer les normes
+        
         for i in T_linspace:
-            Ut = df[df['t'] == i].iloc[:, -2:]
+            Ut = df[df['t'] == i].iloc[:, 3:5]
             Ut = Ut.to_numpy()
             # print("t", i)
             # print("Ut", Ut)
@@ -44,4 +45,4 @@ def plot_folder(folder_path="Simulations"):
 
 
 if __name__ == '__main__':
-    plot_folder(sys.argv[1])
+    plot_folder(input("Dossier à figurer : "))
