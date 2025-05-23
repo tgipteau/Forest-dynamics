@@ -77,6 +77,30 @@ def gen_init(center):
     return u0
 
 
+def gen_init_intermed():
+    """Objectif : générer des conditions initiales uniformément, dans le
+    complémentaire des boules Extinction et Persistence.
+    Méthode : tirage aléatoire dans la demi boule supérieure et rejet si dans une des
+    boules. (Vérifier le biais plus tard !!)
+    """
+
+    radius_balls = 500
+    max_distance_from_zero = n1(persistence_vector)
+
+    while True:
+        noise = np.random.uniform(0, 1, persistence_vector.shape)
+        u0 = (
+            extinction_vector
+            + noise / n1(noise) * random.random() * max_distance_from_zero
+        )
+        distance_to_e = n1(extinction_vector - u0)
+        distance_to_p = n1(persistence_vector - u0)
+
+        if distance_to_e > radius_balls and distance_to_p > radius_balls:
+            # alors u0 n'est pas dans une des boules -> bingo
+            return u0
+
+
 # Simulations #######
 
 
@@ -133,7 +157,11 @@ def run_simulation(nb_simulations, sim_id="default", center=persistence_vector, 
     for isim in tqdm(range(nb_simulations)):
 
         dat_file = os.path.join(save_folder, "dat_" + str(isim) + ".csv")
-        init = gen_init(center)
+
+        if center is None:
+            init = gen_init_intermed()
+        else:
+            init = gen_init(center)
 
         u = init[:, 0]
         w = init[:, 1]
@@ -207,7 +235,6 @@ def run_simulation(nb_simulations, sim_id="default", center=persistence_vector, 
 
 
 def plot_folder_distances(sim_id="default", center=persistence_vector, hline_norm=0):
-
     fig, ax = plt.subplots()
     fig.suptitle("Distance from extinction state over time (1-norm)")
 
@@ -243,7 +270,44 @@ def plot_folder_distances(sim_id="default", center=persistence_vector, hline_nor
             pass
 
     ax.axhline(hline_norm, linestyle="--")
-    plt.savefig(os.path.join("plots", sim_id))
+    return fig
+
+
+def plot_intermeds(sim_id="default_intermed"):
+    """Dessiner en deux plots la distance"""
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection="3d")
+    fig.suptitle("Rendering of distance to stable states over time.")
+    ax.set_xlabel("time")
+    ax.set_ylabel("D(persistence)")
+    ax.set_zlabel("D(extinction)")
+
+    sim_folder = os.path.join("Simulations", sim_id)
+    for sim_path in tqdm(os.listdir(sim_folder)):
+
+        sim_path = os.path.join(sim_folder, sim_path)
+
+        df = pd.read_csv(
+            sim_path,
+            header=0,
+            names=["t", "i", "j", "u", "v"],
+            sep=" ",
+            index_col=False,
+        )
+
+        trace_from_e = []
+        trace_from_p = []
+
+        for t in T_linspace:
+            Ut = df[df["t"] == t].iloc[:, 3:]
+            Ut = Ut.to_numpy()
+
+            trace_from_e.append(n1(Ut - extinction_vector))
+            trace_from_p.append(n1(Ut - persistence_vector))
+
+        ax.plot(T_linspace, trace_from_p, trace_from_e)
+    plt.show()
 
 
 # Calculs
@@ -251,8 +315,8 @@ def plot_folder_distances(sim_id="default", center=persistence_vector, hline_nor
 
 def compute_probs(sim_id="default", center=persistence_vector, b_radius=500):
 
-    P_out = 0
-    P_stay = 0
+    P_out = 0  # sortir de la boule vers le centre
+    P_stay = 0  # rester dans la boule de départ
     nb_of_sims = 0
 
     sim_folder = os.path.join("Simulations", sim_id)
@@ -286,10 +350,59 @@ def compute_probs(sim_id="default", center=persistence_vector, b_radius=500):
     P_out /= nb_of_sims
     P_stay /= nb_of_sims
 
-    # print("P_out", P_out)
-    # print("P_stay", P_stay)
-
     return P_stay, P_out
+
+
+def compute_probs_intermed(b_radius=500, sim_id="default_intermed"):
+    """Ici, b_radius désigne le rayon des boules Persistence et Extinction.
+    On calcule la proba de sortir de l'état intermédiaire en 'tau' temps.
+    """
+
+    P_to_persistence = 0  # sortir de la boule vers la Persistence
+    P_to_extinction = 0  # sortir de la boule vers l'extinction
+    P_stay = 0  # rester dans zone intermédiaire
+    nb_of_sims = 0
+
+    sim_folder = os.path.join("Simulations", sim_id)
+    for sim_path in tqdm(os.listdir(sim_folder)):
+
+        sim_path = os.path.join(sim_folder, sim_path)
+
+        df = pd.read_csv(
+            sim_path,
+            header=0,
+            names=["t", "i", "j", "u", "v"],
+            sep=" ",
+            index_col=False,
+        )
+
+        u0 = df[df["t"] == 0].iloc[:, 3:].to_numpy()
+        uTau = df[df["t"] == T - 1].iloc[:, 3:].to_numpy()
+        start_distances = n1(persistence_vector - u0), n1(extinction_vector - u0)
+
+        if start_distances[0] > b_radius and start_distances[1] > b_radius:
+            # u0 bien généré : pas dans une des deux boules
+            nb_of_sims += 1
+
+            # considérer l'état final après une période (tau-1)
+            end_p_distance = n1(uTau - persistence_vector)
+            end_e_distance = n1(uTau - extinction_vector)
+
+            if end_p_distance < 500:
+                P_to_persistence += 1
+            elif end_e_distance < 500:
+                P_to_extinction += 1
+            else:
+                P_stay += 1
+
+    P_stay /= nb_of_sims
+    P_to_extinction /= nb_of_sims
+    P_to_persistence /= nb_of_sims
+
+    return P_stay, P_to_extinction, P_to_persistence
+
+
+# Gestion de la partie "zone intermédiaire"
 
 
 # Quelques exemples d'usage :
