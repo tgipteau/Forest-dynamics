@@ -1,14 +1,10 @@
 ## TOUNDRA 2
 ### <b>Modèle à quatre équations avec compétition. Méthode FREEFEM.</b>
 
-## UTILISATION 
+## UTILISATION
 
-1 - lancer 1_tk_starter.py<br>
-2 - choisir entre lancer une nouvelle simulation ou utiliser une simulation enregistrée<br>
-3 - la simulation charge (soit nouvelle simulation avec suivi de chargement, soit ancienne)<br>
-4 - la fenêtre tkinter se ferme et pygame se lance<br>
-5 - les boutons / curseurs ne sont utilisables qu'après un tour complet de la simulation,
-pour pouvoir sauvegarder la vidéo / les frames<br>
+1 - régler la simulation avec "config.yaml"
+2 - éxecuter toundra_onfile.py
 
 <br>
 <br>
