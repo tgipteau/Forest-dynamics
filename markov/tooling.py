@@ -56,31 +56,35 @@ extinction_vector = np.zeros_like(persistence_vector)
 radius_balls = 0.6
 # Utils #######
 
+
 def ninf(matrice):
-    """ norme inf d'une matrice : max des abs
-    """
+    """norme inf d'une matrice : max des abs"""
     return np.max(np.abs(matrice))
+
 
 def gen_init_persistence():
     global radius_balls
-    u_0 = np.random.uniform(uplus-radius_balls, uplus, J*J)
-    w_0 = np.random.uniform(uplus-radius_balls, wplus, J*J)
+    u_0 = np.random.uniform(uplus - radius_balls, uplus, J * J)
+    w_0 = np.random.uniform(uplus - radius_balls, wplus, J * J)
     u_init = np.stack((u0, w0), axis=1)
     return u0
-    
+
+
 def gen_init_extinction():
     global radius_balls
-    u_0 = np.random.uniform(0, radius_balls, J*J)
-    w_0 = np.random.uniform(0, radius_balls, J*J)
+    u_0 = np.random.uniform(0, radius_balls, J * J)
+    w_0 = np.random.uniform(0, radius_balls, J * J)
     u_init = np.stack((u0, w0), axis=1)
     return u_init
 
+
 def gen_init_intermed():
     global radius_balls
-    u0 = np.random.uniform(radius_balls, uplus-radius_balls, J*J)
-    w0 = np.random.uniform(radius_balls, wplus-radius_balls, J*J)
+    u0 = np.random.uniform(radius_balls, uplus - radius_balls, J * J)
+    w0 = np.random.uniform(radius_balls, wplus - radius_balls, J * J)
     u_init = np.stack((u0, w0), axis=1)
-    return u_init        
+    return u_init
+
 
 # Simulations #######
 
@@ -218,19 +222,19 @@ def run_simulation(nb_simulations, sim_id="default", init_state="p", p=0.0):
 
 # Plots
 
-def plot_distances(sim_id="default", center="persistence"): 
+
+def plot_distances(sim_id="default", center="persistence"):
     global radius_balls
 
     fig, ax = plt.subplots()
     fig.suptitle(f"Distance from {center} state over time (inf-norm)")
 
-    if center=="persistence":
+    if center == "persistence":
         center_vector = persistence_vector
-    elif center=="extinction":
+    elif center == "extinction":
         center_vector = extinction_vector
     else:
         raise ValueError(f"Selected center {center} is not valid.")
-
 
     sim_folder = os.path.join("Simulations", sim_id)
     for sim_path in tqdm(os.listdir(sim_folder)):
@@ -395,8 +399,6 @@ def compute_probs_intermed(b_radius=500, sim_id="default_intermed"):
     P_to_persistence /= nb_of_sims
 
     return P_stay, P_to_extinction, P_to_persistence
-
-
 
 
 # Quelques exemples d'usage :
