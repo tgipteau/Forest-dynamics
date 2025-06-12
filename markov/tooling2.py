@@ -42,8 +42,6 @@ kx = delta * dtau / dx**2
 ky = delta * dtau / dy**2
 
 
-T_linspace = np.linspace(start=0, stop=T - 1, num=T, endpoint=True)
-
 uplus = b + np.sqrt((alpha * delta - c) / a)
 umoins = b - np.sqrt((alpha * delta - c) / a)
 wplus = (alpha / beta) * uplus
@@ -55,7 +53,7 @@ extinction_vector = np.zeros_like(persistence_vector)
 # TOOLS
 
 RADIUS_BALLS = 0.6
-NB_SIMULATIONS = 1200
+NB_SIMULATIONS = 120
 
 
 def ninf(matrice):
@@ -65,7 +63,7 @@ def ninf(matrice):
 
 def gen_init_persistence():
     u_0 = np.random.uniform(uplus - RADIUS_BALLS, uplus, J * J)
-    w_0 = np.random.uniform(uplus - RADIUS_BALLS, wplus, J * J)
+    w_0 = np.random.uniform(wplus - RADIUS_BALLS, wplus, J * J)
     u_init = np.stack((u_0, w_0), axis=1)
     return u_init
 
@@ -82,6 +80,9 @@ def gen_init_intermed():
     w_0 = np.random.uniform(RADIUS_BALLS, wplus - RADIUS_BALLS, J * J)
     u_init = np.stack((u_0, w_0), axis=1)
     return u_init
+
+
+# CONFIGURATIONS SIMULATIONS
 
 
 def run_simulation_with_params(nb_simulations, sim_id="default", init_state="p", p=0.0):
@@ -155,8 +156,14 @@ def run_simulation_with_params(nb_simulations, sim_id="default", init_state="p",
         file = open(dat_file, "w")
         file.write("t i j u w \n")
 
-        # écriture fichier
-        for t in range(T):
+        if p == 0.0:
+            # mode sans feux
+            time_range = T
+        elif p > 0.0:
+            # mode avec feux
+            time_range = 2
+
+        for t in range(time_range):
             for i in range(J):
                 for j in range(J):
                     file.write(
@@ -195,7 +202,7 @@ def run_simulation_with_params(nb_simulations, sim_id="default", init_state="p",
 
             # Partie résolution de feux
 
-            if t % freq == 0:
+            if t % freq == 0 and t != 0:
 
                 if np.random.binomial(1, p) == 1:
 
@@ -214,9 +221,6 @@ def run_simulation_with_params(nb_simulations, sim_id="default", init_state="p",
                         for j in range(J):
                             u[i * J + j] = var_ee(i, j, u)
                             w[i * J + j] = var_ee(i, j, w)
-
-
-# CONFIGURATIONS SIMULATIONS
 
 
 def run_persistence_no_fire():
@@ -282,7 +286,7 @@ def run_intermed_with_fire():
 # COMPUTE PROBABILITIES
 
 
-def compute_probs_with_parameters(sim_id="default", starting_from=p, with_fire=False):
+def compute_probs_with_parameters(sim_id="default", starting_from="p", with_fire=False):
 
     P_out = 0  # sortir de la boule
     P_stay = 0  # rester dans la boule de départ
@@ -379,16 +383,103 @@ def compute_intermed_no_fire():
     )
 
 
+# PLOTTING FUNCTIONS
+
+
+def plot_with_parameters(sim_id="default", starting_from="p", with_fire=False):
+
+    sim_folder = os.path.join("Simulations", sim_id)
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    for sim_path in tqdm(os.listdir(sim_folder)):
+        sim_path = os.path.join(sim_folder, sim_path)
+
+        df = pd.read_csv(
+            sim_path,
+            header=0,
+            names=["t", "i", "j", "u", "v"],
+            sep=" ",
+            index_col=False,
+        )
+
+        trace = []
+
+        if with_fire:
+            time_linspace = np.linspace(0, 1, num=2, endpoint=True)
+        elif not with_fire:
+            time_linspace = np.linspace(0, T - 1, num=T, endpoint=True)
+
+        for t in time_linspace:
+            Ut = df[df["t"] == t].iloc[:, 3:]
+            Ut = Ut.to_numpy()
+            if starting_from == "p":
+                # Calcul de la distance au centre de la boule de persistance
+                distance_center = ninf(persistence_vector - Ut)
+                print(Ut)
+            elif starting_from == "e":
+                # Calcul de la distance au centre de la boule d'extinction
+                distance_center = ninf(extinction_vector - Ut)
+            elif starting_from == "i":
+                pass
+
+            trace.append(distance_center)
+
+        ax.plot(time_linspace, trace)
+
+    ax.set_title(f"Simulation {sim_id}")
+    ax.axhline(
+        y=RADIUS_BALLS,
+        color="red",
+        linestyle="--",
+        label="RADIUS_BALLS",
+    )
+
+    plt.show()
+
+
+def plot_persistence_with_fire():
+    plot_with_parameters(
+        sim_id="persistence_with_fire", starting_from="p", with_fire=True
+    )
+
+
+def plot_extinction_with_fire():
+    plot_with_parameters(
+        sim_id="extinction_with_fire", starting_from="e", with_fire=True
+    )
+
+
+def plot_intermed_with_fire():
+    plot_with_parameters(sim_id="intermed_with_fire", starting_from="i", with_fire=True)
+
+
+def plot_persistence_no_fire():
+    plot_with_parameters(
+        sim_id="persistence_no_fire", starting_from="p", with_fire=False
+    )
+
+
+def plot_extinction_no_fire():
+    plot_with_parameters(
+        sim_id="extinction_no_fire", starting_from="e", with_fire=False
+    )
+
+
+def plot_intermed_no_fire():
+    plot_with_parameters(sim_id="intermed_no_fire", starting_from="i", with_fire=False)
+
+
 # MAIN FUNCTIONS
 
 
 def run_all_simulations():
-    run_persistence_no_fire()
-    run_extinction_no_fire()
-    run_intermed_no_fire()
     run_persistence_with_fire()
     run_extinction_with_fire()
     run_intermed_with_fire()
+    run_persistence_no_fire()
+    run_extinction_no_fire()
+    run_intermed_no_fire()
 
 
 def compute_all_simulations():
@@ -400,6 +491,15 @@ def compute_all_simulations():
     compute_intermed_with_fire()
 
 
+def plot_all_simulations():
+    plot_persistence_no_fire()
+    plot_extinction_no_fire()
+    plot_intermed_no_fire()
+    plot_persistence_with_fire()
+    plot_extinction_with_fire()
+    plot_intermed_with_fire()
+
+
 if __name__ == "__main__":
 
-    run_all_simulations()
+    plot_persistence_with_fire()
