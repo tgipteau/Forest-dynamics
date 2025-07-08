@@ -1,23 +1,25 @@
 # config pour le module "tooling.py"
 
 a: 1
-b: 1
+b: 0.1
 c: 0.01
 
 alpha: 2
 beta: 1
-delta: 0.55
+delta: 0.5
+
+# NB pour instabilité extinction, choisir ab^2+c < alpha*delta
 
 L: 20
 J: 40
-T: 20
+T: 26
 N: 1000
 
-freq: 20 # càd "tau"
-minree: 2
-maxree: 10
+freq: 1 # càd "tau"
+minree: 5
+maxree: 15
 # p: 0.0 
-intensity: 0.7
+intensity: 1
 
 
 
