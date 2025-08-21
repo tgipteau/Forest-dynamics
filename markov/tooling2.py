@@ -42,6 +42,8 @@ kx = delta * dtau / dx**2
 ky = delta * dtau / dy**2
 
 
+plt.rcParams.update({"font.size": 22})
+
 uplus = b + np.sqrt((alpha * delta - c) / a)
 print(f"uplus = {uplus}")
 print(f"wplus = {uplus * (alpha / beta)}")
@@ -630,25 +632,25 @@ if __name__ == "__main__":
     # plot_extinction_no_fire()
 
     # run_intermed_no_fire()
-    compute_intermed_no_fire()
-    plot_intermed_no_fire()
+    # compute_intermed_no_fire()
+    # plot_intermed_no_fire()
 
     # run_persistence_no_fire()
-    compute_persistence_no_fire()
-    plot_persistence_no_fire()
+    # compute_persistence_no_fire()
+    # plot_persistence_no_fire()
 
     ### WITH FIRE SIMULATIONS
     # run_extinction_with_fire()
-    compute_extinction_with_fire()
-    plot_extinction_with_fire()
+    # compute_extinction_with_fire()
+    # plot_extinction_with_fire()
 
     # run_intermed_with_fire()
-    compute_intermed_with_fire()
-    plot_intermed_with_fire()
+    # compute_intermed_with_fire()
+    # plot_intermed_with_fire()
 
     # run_persistence_with_fire()
-    compute_persistence_with_fire()
-    plot_persistence_with_fire()
+    # compute_persistence_with_fire()
+    # plot_persistence_with_fire()
 
     ### VERSIONS ENTRECOUPéES
 
