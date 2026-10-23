@@ -30,10 +30,5 @@ en Python, et donc portable sur une plateforme comme PythonAnywhere.  Ne compren
 pour configurer la simulation : la configuration se fait par l'édition d'un fichier <i>.yaml</i>.<br>
 <br>
 
-___
-
-### Partie "chaînes de markov"
-
-Je travaile maintenant sur une modélisation en chaîne de markov du procédé hybride edp/stochastique.
 
 
