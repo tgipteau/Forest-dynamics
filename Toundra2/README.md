@@ -1,5 +1,8 @@
 ## TOUNDRA 2
 ### <b>Modèle à quatre équations avec compétition. Méthode FREEFEM.</b>
+<img width="469" height="264" alt="Capture d’écran 2026-10-27 à 00 58 41" src="https://github.com/user-attachments/assets/605965d9-35b4-4b28-b8aa-45e8ded37fd0" />
+<br>
+<br>
 
 ## UTILISATION
 
@@ -15,7 +18,3 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- une vidéo<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- un dossier contenant les frames de la simulation, en cas de problème avec la vidéo
     (codecs, etc...)<br>
-<br>
-<br>
-
-<img width="1734" height="824" alt="image" src="https://github.com/user-attachments/assets/7bfedac9-9e17-4a53-9dca-fcbf136e6610" />
