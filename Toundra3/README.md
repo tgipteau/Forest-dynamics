@@ -1,5 +1,9 @@
 ## TOUNDRA 3
 ### <b>Modèle à quatre équations avec compétition. Méthode des différences finies.</b>
+<img width="799" height="447" alt="Capture d’écran 2026-10-27 à 00 59 28" src="https://github.com/user-attachments/assets/05adc47d-42e4-4f00-a9eb-6c36ddd67e85" />
+
+<br>
+<br>
 
 ## UTILISATION 
 
@@ -19,8 +23,4 @@ pour pouvoir sauvegarder la vidéo / les frames<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- un dossier contenant les frames de la simulation, en cas de problème avec la vidéo
     (codecs, etc...)<br>
 
-<br>
-<br>
 
-
-<img width="1714" height="754" alt="image" src="https://github.com/user-attachments/assets/ecf3b2fd-039d-4e4d-9a9d-e557c2e8244e" />
