@@ -15,5 +15,7 @@
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- une vidéo<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- un dossier contenant les frames de la simulation, en cas de problème avec la vidéo
     (codecs, etc...)<br>
+<br>
+<br>
 
-
+<img width="1734" height="824" alt="image" src="https://github.com/user-attachments/assets/7bfedac9-9e17-4a53-9dca-fcbf136e6610" />
