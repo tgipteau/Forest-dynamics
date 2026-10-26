@@ -19,4 +19,8 @@ pour pouvoir sauvegarder la vidéo / les frames<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- un dossier contenant les frames de la simulation, en cas de problème avec la vidéo
     (codecs, etc...)<br>
 
+<br>
+<br>
 
+
+<img width="1714" height="754" alt="image" src="https://github.com/user-attachments/assets/ecf3b2fd-039d-4e4d-9a9d-e557c2e8244e" />
