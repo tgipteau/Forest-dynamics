@@ -1,6 +1,6 @@
-# LS2N
+# LS2N - Dynamique de forêts
 
-Les scripts présents dans ce dépôt sont des outils de simulation d'évolution de forêt.<br>
+Les scripts présents dans ce dépôt sont des outils de simulation d'évolution de forêt réalisés pour le LS2N à Nantes.<br>
 
 ### Les modèles
 
