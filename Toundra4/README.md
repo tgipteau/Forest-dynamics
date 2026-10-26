@@ -1,6 +1,11 @@
 ## TOUNDRA 4
 ### <b>Modèle à quatre équations avec compétition. Méthode des différences finies.</b>
 
+
+<img width="970" height="544" alt="image" src="https://github.com/user-attachments/assets/31b560a3-2d26-4381-9b0d-ac551cd290c9" />
+<br>
+<br>
+
 ## UTILISATION 
 
 1 - régler ses paramètres de simulation dans config.yaml <i>(lire les commentaires)</i><br>
@@ -19,8 +24,5 @@ pour pouvoir sauvegarder la vidéo / les frames<br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- un dossier contenant les frames de la simulation, en cas de problème avec la vidéo
     (codecs, etc...)<br>
 
-<br>
-<br>
 
 
-<img width="970" height="544" alt="image" src="https://github.com/user-attachments/assets/31b560a3-2d26-4381-9b0d-ac551cd290c9" />
