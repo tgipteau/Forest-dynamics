@@ -15,7 +15,9 @@ On distingue deux modèles :
 </ul>
 
 
-### Contenus de ce dépôt - Partie "visualisation"
+### Contenus de ce dépôt 
+
+<b> Un article de recherche </b> sur le modèle utilisé, ainsi qu'une étude d'un modèle de markov hybride de simplification.
 
 <b>Toundra2</b> : utilise le modèle à quatre équations (deux espèces d'arbres). Utilise FreeFem++ (logiciel externe).<br>
 Ce Fiso est destiné à une utilisation en local après installation de FreeFem++. Comprend une interface utilisateur<br>
