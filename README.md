@@ -20,17 +20,16 @@ On distingue deux modèles :
 <b> Un article de recherche </b> sur le modèle utilisé, ainsi qu'une étude d'un modèle de markov hybride de simplification.
 
 <b>Toundra2</b> : utilise le modèle à quatre équations (deux espèces d'arbres). Utilise FreeFem++ (logiciel externe).<br>
-Ce Fiso est destiné à une utilisation en local après installation de FreeFem++. Comprend une interface utilisateur<br>
-pour lancer des simulations et les charger (<i>user-friendly</i>).<br>
+Destiné à une utilisation en local après installation de FreeFem++. Comprend une interface utilisateur<br>
+pour lancer des simulations et les charger.<br>
 
-<b>Toundra3</b> : utilise le modèle à deux équations (une seule espèce d'arbre). C'est un programme entièrement écrit<br>
-en Python, et donc portable sur une plateforme comme PythonAnywhere. Ne comprend pas d'interface utilisateur<br>
-pour configurer la simulation : la configuration se fait par l'édition d'un fichier <i>.yaml</i>.<br>
+<b>Toundra3</b> : utilise le modèle à deux équations (une seule espèce d'arbre). Entièrement Python.<br>
+Ne comprend pas d'interface utilisateur pour configurer la simulation : <br>
+la configuration se fait par l'édition d'un fichier <i>.yaml</i>.<br>
 
-<b>Toundra4</b> : utilise le modèle à quatre équations (deux espèces d'arbres). C'est un programme entièrement écrit<br>
-en Python, et donc portable sur une plateforme comme PythonAnywhere.  Ne comprend pas d'interface utilisateur<br>
-pour configurer la simulation : la configuration se fait par l'édition d'un fichier <i>.yaml</i>.<br>
-<br>
+<b>Toundra4</b> : utilise le modèle à quatre équations (deux espèces d'arbres). Entièrement Python. <br>
+Ne comprend pas d'interface utilisateur pour configurer la simulation : <br>
+la configuration se fait par l'édition d'un fichier <i>.yaml</i>.<br>
 
 
 
